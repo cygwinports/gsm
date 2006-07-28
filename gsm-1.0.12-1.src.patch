@@ -1,0 +1,196 @@
+diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make origsrc/gsm-1.0-pl12/Makefile src/gsm-1.0-pl12/Makefile
+--- origsrc/gsm-1.0-pl12/Makefile	2006-04-26 14:14:26.000000000 -0500
++++ src/gsm-1.0-pl12/Makefile	2006-07-26 21:04:49.230500000 -0500
+@@ -46,7 +46,7 @@
+ CC		= gcc -ansi -pedantic
+ CCFLAGS 	= -c -O2 -DNeedFunctionPrototypes=1
+ 
+-LD 		= $(CC)
++# LD 		= $(CC)
+ 
+ # LD		= gcc
+ # LDFLAGS 	=
+@@ -71,7 +71,7 @@
+ # Leave INSTALL_ROOT empty (or just don't execute "make install") to
+ # not install gsm and toast outside of this directory.
+ 
+-INSTALL_ROOT	=
++INSTALL_ROOT	= /usr
+ 
+ # Where do you want to install the gsm library, header file, and manpages?
+ #
+@@ -96,17 +96,22 @@
+ #  Other tools
+ 
+ SHELL		= /bin/sh
+-LN		= ln
++LN		= ln -s
+ BASENAME 	= basename
+ AR		= ar
+ ARFLAGS		= cr
+-RMFLAGS		=
++RMFLAGS		= -f
+ FIND		= find
+ COMPRESS 	= compress
+ COMPRESSFLAGS 	= 
+ # RANLIB 	= true
+ RANLIB	 	= ranlib
+ 
++LIBTOOL			= libtool
++LIBTOOL_COMPILE	= $(LIBTOOL) --mode=compile --tag=CC $(CC)
++LIBTOOL_INSTALL	= $(LIBTOOL) --mode=install /bin/install
++LD				= $(LIBTOOL) --mode=link --tag=CC $(CC)
++
+ #
+ #    You shouldn't have to configure below this line if you're porting.
+ # 
+@@ -139,7 +144,7 @@
+ 
+ # Targets
+ 
+-LIBGSM	= $(LIB)/libgsm.a
++LIBGSM	= $(LIB)/libgsm.la
+ 
+ TOAST	= $(BIN)/toast
+ UNTOAST	= $(BIN)/untoast
+@@ -203,24 +208,24 @@
+ 
+ # Object files
+ 
+-GSM_OBJECTS =	$(SRC)/add.o		\
+-		$(SRC)/code.o		\
+-		$(SRC)/debug.o		\
+-		$(SRC)/decode.o		\
+-		$(SRC)/long_term.o	\
+-		$(SRC)/lpc.o		\
+-		$(SRC)/preprocess.o	\
+-		$(SRC)/rpe.o		\
+-		$(SRC)/gsm_destroy.o	\
+-		$(SRC)/gsm_decode.o	\
+-		$(SRC)/gsm_encode.o	\
+-		$(SRC)/gsm_explode.o	\
+-		$(SRC)/gsm_implode.o	\
+-		$(SRC)/gsm_create.o	\
+-		$(SRC)/gsm_print.o	\
+-		$(SRC)/gsm_option.o	\
+-		$(SRC)/short_term.o	\
+-		$(SRC)/table.o
++GSM_OBJECTS =	$(SRC)/add.lo		\
++		$(SRC)/code.lo		\
++		$(SRC)/debug.lo		\
++		$(SRC)/decode.lo		\
++		$(SRC)/long_term.lo	\
++		$(SRC)/lpc.lo		\
++		$(SRC)/preprocess.lo	\
++		$(SRC)/rpe.lo		\
++		$(SRC)/gsm_destroy.lo	\
++		$(SRC)/gsm_decode.lo	\
++		$(SRC)/gsm_encode.lo	\
++		$(SRC)/gsm_explode.lo	\
++		$(SRC)/gsm_implode.lo	\
++		$(SRC)/gsm_create.lo	\
++		$(SRC)/gsm_print.lo	\
++		$(SRC)/gsm_option.lo	\
++		$(SRC)/short_term.lo	\
++		$(SRC)/table.lo
+ 
+ TOAST_OBJECTS =	$(SRC)/toast.o 		\
+ 		$(SRC)/toast_lin.o	\
+@@ -257,7 +262,7 @@
+ # Install targets
+ 
+ GSM_INSTALL_TARGETS =	\
+-		$(GSM_INSTALL_LIB)/libgsm.a		\
++		$(GSM_INSTALL_LIB)/libgsm.la		\
+ 		$(GSM_INSTALL_INC)/gsm.h		\
+ 		$(GSM_INSTALL_MAN)/gsm.3		\
+ 		$(GSM_INSTALL_MAN)/gsm_explode.3	\
+@@ -276,6 +281,8 @@
+ .c.o:
+ 		$(CC) $(CFLAGS) $?
+ 		@-mv `$(BASENAME) $@` $@ > /dev/null 2>&1
++%.lo: %.c
++		$(LIBTOOL_COMPILE) $(CFLAGS) -o $@ $<
+ 
+ # Target rules
+ 
+@@ -300,9 +307,7 @@
+ # The basic API: libgsm
+ 
+ $(LIBGSM):	$(LIB) $(GSM_OBJECTS)
+-		-rm $(RMFLAGS) $(LIBGSM)
+-		$(AR) $(ARFLAGS) $(LIBGSM) $(GSM_OBJECTS)
+-		$(RANLIB) $(LIBGSM)
++		$(LD) -rpath $(GSM_INSTALL_LIB) -no-undefined -o $(LIBGSM) $(GSM_OBJECTS)
+ 
+ 
+ # Toast, Untoast and Tcat -- the compress-like frontends to gsm.
+@@ -351,52 +356,42 @@
+ 		fi
+ 
+ $(TOAST_INSTALL_BIN)/toast:	$(TOAST)
+-		-rm $@
+-		cp $(TOAST) $@
+-		chmod 755 $@
++		$(LIBTOOL_INSTALL) $< $(TOAST_INSTALL_BIN)
+ 
+ $(TOAST_INSTALL_BIN)/untoast:	$(TOAST_INSTALL_BIN)/toast
+-		-rm $@
+-		ln $? $@
++		-rm $(RMFLAGS) $@
++		$(LN) $? $@
+ 
+ $(TOAST_INSTALL_BIN)/tcat:	$(TOAST_INSTALL_BIN)/toast
+-		-rm $@
+-		ln $? $@
++		-rm $(RMFLAGS) $@
++		$(LN) $? $@
+ 
+ $(TOAST_INSTALL_MAN)/toast.1:	$(MAN)/toast.1
+-		-rm $@
+ 		cp $? $@
+ 		chmod 444 $@
+ 
+ $(GSM_INSTALL_MAN)/gsm.3:	$(MAN)/gsm.3
+-		-rm $@
+ 		cp $? $@
+ 		chmod 444 $@
+ 
+ $(GSM_INSTALL_MAN)/gsm_option.3:	$(MAN)/gsm_option.3
+-		-rm $@
+ 		cp $? $@
+ 		chmod 444 $@
+ 
+ $(GSM_INSTALL_MAN)/gsm_explode.3:	$(MAN)/gsm_explode.3
+-		-rm $@
+ 		cp $? $@
+ 		chmod 444 $@
+ 
+ $(GSM_INSTALL_MAN)/gsm_print.3:	$(MAN)/gsm_print.3
+-		-rm $@
+ 		cp $? $@
+ 		chmod 444 $@
+ 
+ $(GSM_INSTALL_INC)/gsm.h:	$(INC)/gsm.h
+-		-rm $@
+ 		cp $? $@
+ 		chmod 444 $@
+ 
+-$(GSM_INSTALL_LIB)/libgsm.a:	$(LIBGSM)
+-		-rm $@
+-		cp $? $@
+-		chmod 444 $@
++$(GSM_INSTALL_LIB)/libgsm.la:	$(LIBGSM)
++		$(LIBTOOL_INSTALL) $< $(GSM_INSTALL_LIB)
+ 
+ 
+ # Distribution
+@@ -416,7 +411,7 @@
+ 		@-echo uninstall: Done.
+ 
+ semi-clean:
+-		-rm $(RMFLAGS)  */*.o			\
++		-rm $(RMFLAGS)  */*.o	src/*.lo		\
+ 			$(TST)/lin2cod $(TST)/lin2txt	\
+ 			$(TST)/cod2lin $(TST)/cod2txt	\
+ 			$(TST)/gsm2cod 			\
