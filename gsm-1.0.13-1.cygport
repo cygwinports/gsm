@@ -1,0 +1,38 @@
+DESCRIPTION="GSM 06.10 speech compression library"
+HOMEPAGE="http://kbs.cs.tu-berlin.de/~jutta/toast.html"
+SRC_URI="http://kbs.cs.tu-berlin.de/~jutta/gsm/${P}.tar.gz"
+PATCH_URI="mirror://portage/media-sound/gsm/files/gsm-1.0.12-shared.patch
+           mirror://portage/media-sound/gsm/files/gsm-1.0.12-memcpy.patch
+           mirror://portage/media-sound/gsm/files/gsm-1.0.12-64bit.patch
+           1.0.13-shared-libgsm.patch"
+
+SRC_DIR="${PN}-${PV[1]}.${PV[2]}-pl${PV[3]}"
+
+PKG_NAMES="gsm libgsm1 libgsm-devel"
+gsm_CONTENTS="--exclude=*.dll usr/bin/ usr/share/doc/ usr/share/man/man1/"
+libgsm1_CONTENTS='usr/bin/cyggsm-1.dll'
+libgsm_devel_CONTENTS='usr/include/ usr/lib/ usr/share/man/man3/'
+
+src_compile() {
+	lndirs
+	cd ${B}
+	cygmake -j1 \
+		CC="${CC}" \
+		CCFLAGS="-c ${CFLAGS} -ansi -pedantic -DNeedFunctionPrototypes=1" \
+		LD="${CC}" \
+		LDFLAGS="${LDFLAGS}" \
+		LIBGSMSO="\$(LIB)/cyggsm-1.dll"
+}
+
+src_install() {
+	cd ${B}
+	dobin lib/*.dll bin/*.exe
+	dolib lib/*.a
+	doman man/toast.1 man/gsm*.3
+
+	dosym toast.exe /usr/bin/tcat
+	dosym toast.exe /usr/bin/untoast
+
+	insinto /usr/include
+	doins inc/gsm.h
+}

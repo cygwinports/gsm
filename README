@@ -6,16 +6,15 @@ RPE/LTP (residual pulse excitation/long term prediction) coding at 13
 kbit/s.
 
 Runtime requirements:
-  cygwin-1.5.21-1
+  cygwin-1.7.0-45
+  libgcc1-4.3.2-2
 
 Build requirements:
 (besides corresponding -devel packages)
-  cygwin-1.5.21-1
-  binutils-20060709-1
-  cygport-0.2.4-1
-  gcc-core-3.4.4-1
-  libtool1.5-1.5.22-1
-  make-3.81-1
+  binutils-20080624-2
+  cygport-0.9.6-1
+  gcc4-core-4.3.2-2
+  make-3.81-2
   sed-4.1.5-1
 
 Canonical website:
@@ -27,42 +26,38 @@ Canonical download:
 -------------------------------------------
 
 Build instructions:
-  unpack gsm-1.0.12-X-src.tar.bz2
+  unpack gsm-1.0.13-X-src.tar.bz2
     if you use setup to install this src package, it will be
 	 unpacked under /usr/src automatically
   cd /usr/src
-  cygport ./gsm-1.0.12-X.cygport all
+  cygport ./gsm-1.0.13-X.cygport all
 
 This will create:
-  /usr/src/gsm-1.0.12-X-src.tar.bz2
-  /usr/src/gsm-1.0.12-X.tar.bz2
-  /usr/src/libgsm-devel-1.0.12-X.tar.bz2
-  /usr/src/libgsm0-1.0.12-X.tar.bz2
+  /usr/src/gsm-1.0.13-X-src.tar.bz2
+  /usr/src/gsm-1.0.13-X.tar.bz2
+  /usr/src/libgsm-devel-1.0.13-X.tar.bz2
+  /usr/src/libgsm1-1.0.13-X.tar.bz2
 
 -------------------------------------------
 
 Files included in the binary package:
 
+(gsm)
   /usr/bin/tcat.exe
   /usr/bin/toast.exe
   /usr/bin/untoast.exe
-  /usr/share/doc/Cygwin/gsm-1.0.12.README
-  /usr/share/doc/gsm-1.0.12/COPYRIGHT
-  /usr/share/doc/gsm-1.0.12/ChangeLog
-  /usr/share/doc/gsm-1.0.12/INSTALL
-  /usr/share/doc/gsm-1.0.12/README
+  /usr/share/doc/gsm/COPYRIGHT
+  /usr/share/doc/gsm/ChangeLog
+  /usr/share/doc/gsm/README
   /usr/share/man/man1/toast.1.gz
 
-Files included in the runtime library package:
+(libgsm1)
+  /usr/bin/cyggsm-1.dll
 
-  /usr/bin/cyggsm-0.dll
-
-Files included in the development package:
-
+(libgsm-devel)
   /usr/include/gsm.h
   /usr/lib/libgsm.a
   /usr/lib/libgsm.dll.a
-  /usr/lib/libgsm.la
   /usr/share/man/man3/gsm.3.gz
   /usr/share/man/man3/gsm_explode.3.gz
   /usr/share/man/man3/gsm_option.3.gz
@@ -72,8 +67,8 @@ Files included in the development package:
 
 Port Notes:
 
------ version 1.0.12-1 -----
-Initial release for Cygwin.
+----- version 1.0.13-1 -----
+Initial release for Cygwin 1.7.
 
 
 Cygwin port maintained by:
