@@ -1,5 +1,5 @@
 category: Audio
-requires: cygwin libgcc1 libgsm1
+requires: libgcc1 libgsm1
 sdesc: "GSM 06.10 speech compression (utilities)"
 ldesc: "A C library implementation of the European GSM 06.10 provisional
 standard for full-rate speech transcoding, prI-ETS 300 036, which uses

@@ -1,5 +1,5 @@
 category: Audio
-requires: cygwin libgcc1
+requires: libgcc1
 external-source: gsm
 sdesc: "GSM 06.10 speech compression (runtime)"
 ldesc: "A C library implementation of the European GSM 06.10 provisional
