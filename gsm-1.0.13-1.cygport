@@ -20,7 +20,7 @@ src_compile() {
 		CC="${CC}" \
 		CCFLAGS="-c ${CFLAGS} -ansi -pedantic -DNeedFunctionPrototypes=1" \
 		LD="${CC}" \
-		LDFLAGS="${LDFLAGS}" \
+		LFLAGS="${LDFLAGS}" \
 		LIBGSMSO="\$(LIB)/cyggsm-1.dll"
 }
 
