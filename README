@@ -6,16 +6,16 @@ RPE/LTP (residual pulse excitation/long term prediction) coding at 13
 kbit/s.
 
 Runtime requirements:
-  cygwin-1.7.0-45
-  libgcc1-4.3.2-2
+  cygwin-1.7.1-1
+  libgcc1-4.3.4-3
 
 Build requirements:
 (besides corresponding -devel packages)
-  binutils-20080624-2
-  cygport-0.9.6-1
-  gcc4-core-4.3.2-2
+  binutils-2.19.51-1
+  cygport-0.9.80-1
+  gcc4-core-4.3.4-3
   make-3.81-2
-  sed-4.1.5-1
+  sed-4.1.5-2
 
 Canonical website:
   http://kbs.cs.tu-berlin.de/~jutta/toast.html
@@ -40,32 +40,10 @@ This will create:
 
 -------------------------------------------
 
-Files included in the binary package:
-
-(gsm)
-  /usr/bin/tcat.exe
-  /usr/bin/toast.exe
-  /usr/bin/untoast.exe
-  /usr/share/doc/gsm/COPYRIGHT
-  /usr/share/doc/gsm/ChangeLog
-  /usr/share/doc/gsm/README
-  /usr/share/man/man1/toast.1.gz
-
-(libgsm1)
-  /usr/bin/cyggsm-1.dll
-
-(libgsm-devel)
-  /usr/include/gsm.h
-  /usr/lib/libgsm.a
-  /usr/lib/libgsm.dll.a
-  /usr/share/man/man3/gsm.3.gz
-  /usr/share/man/man3/gsm_explode.3.gz
-  /usr/share/man/man3/gsm_option.3.gz
-  /usr/share/man/man3/gsm_print.3.gz
-
-------------------
-
 Port Notes:
+
+----- version 1.0.13-2 -----
+Moved <gsm.h> to <gsm/gsm.h> where packages expect it to be.
 
 ----- version 1.0.13-1 -----
 Initial release for Cygwin 1.7.

@@ -1,6 +1,7 @@
 DESCRIPTION="GSM 06.10 speech compression library"
 HOMEPAGE="http://kbs.cs.tu-berlin.de/~jutta/toast.html"
-SRC_URI="http://kbs.cs.tu-berlin.de/~jutta/gsm/${P}.tar.gz"
+#SRC_URI="http://kbs.cs.tu-berlin.de/~jutta/gsm/${P}.tar.gz"
+SRC_URI="mirror://gentoo/${P}.tar.gz"
 PATCH_URI="mirror://portage/media-sound/gsm/files/gsm-1.0.12-shared.patch
            mirror://portage/media-sound/gsm/files/gsm-1.0.12-memcpy.patch
            mirror://portage/media-sound/gsm/files/gsm-1.0.12-64bit.patch
@@ -33,6 +34,6 @@ src_install() {
 	dosym toast.exe /usr/bin/tcat
 	dosym toast.exe /usr/bin/untoast
 
-	insinto /usr/include
+	insinto /usr/include/gsm
 	doins inc/gsm.h
 }
